@@ -1,0 +1,144 @@
+<!-- Styles -->
+<style>
+#chartdiv {
+  width: 100%;
+height: 100%;
+max-width:100%;
+}
+</style>
+
+<!-- Resources -->
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/plugins/forceDirected.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+
+<!-- Chart code -->
+<script>
+am4core.ready(function() {
+
+// Themes begin
+am4core.useTheme(am4themes_animated);
+// Themes end
+
+
+
+var chart = am4core.create("chartdiv", am4plugins_forceDirected.ForceDirectedTree);
+var networkSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
+
+chart.data = [
+  {
+    name: "모세",
+    fontSize: 40,
+    value: 5,
+    children: [
+      { name: "십보라", value: 10 },
+      { name: "여호수아", value: 10 }
+    ]
+  },
+  {
+    name: "바울",
+    value: 5,
+    children: [
+      { name: "디모데", value: 10 },
+      { name: "바나바", value: 10 }
+    ]
+  },
+  {
+    name: "요한",
+    value: 5,
+    children: [
+      { name: "다니엘", value: 10 },
+      { name: "다윗", value: 10 },
+      { name: "보아스", value: 10 }
+    ]
+  },
+  {
+    name: "베드로",
+    value: 5,
+    children: [
+
+      { name: "나오미", value: 10 },
+
+      { name: "골리앗", value: 10 }
+    ]
+  },
+  {
+    name: "하와", value: 5,children: [
+      { name: "아담", value: 10 },
+      { name: "노아", value: 10 }
+    ]
+  },
+  {
+    name: "디모데",
+    value: 5,
+    children: [
+      { name: "마가", value: 10 },
+      { name: "요엘", value: 10 },
+      { name: "이스라엘", value: 10 }
+    ]
+  },
+  {
+    name: "베냐민",
+    value: 5,
+    children: [
+      { name: "갓", value: 10 },
+      { name: "이삭", value: 10 },
+      { name: "마리", value: 10 }
+    ]
+  },
+  {
+    name: "야곱",
+    value: 5,
+    children: [
+
+      {
+        name: "헤롯",
+        value: 10
+      }
+    ]
+  }
+
+];
+
+networkSeries.maxRadius = 70
+
+networkSeries.dataFields.value = "value";
+networkSeries.dataFields.name = "name";
+networkSeries.dataFields.children = "children";
+networkSeries.nodes.template.tooltipText = "{name}:{value}";
+networkSeries.nodes.template.fillOpacity = 1;
+
+networkSeries.nodes.template.label.text = "{name}"
+networkSeries.fontSize = 20;
+
+networkSeries.links.template.strokeWidth = 1;
+
+var hoverState = networkSeries.links.template.states.create("hover");
+hoverState.properties.strokeWidth = 3;
+hoverState.properties.strokeOpacity = 1;
+
+networkSeries.nodes.template.events.on("over", function(event) {
+  event.target.dataItem.childLinks.each(function(link) {
+    link.isHover = true;
+  })
+  if (event.target.dataItem.parentLink) {
+    event.target.dataItem.parentLink.isHover = true;
+  }
+
+})
+
+networkSeries.nodes.template.events.on("out", function(event) {
+  event.target.dataItem.childLinks.each(function(link) {
+    link.isHover = false;
+  })
+  if (event.target.dataItem.parentLink) {
+    event.target.dataItem.parentLink.isHover = false;
+  }
+})
+
+}); // end am4core.ready()
+</script>
+
+<!-- HTML -->
+<div id="chartdiv"></div>
